@@ -406,7 +406,7 @@ function [xopt,fopt,status,output] = cbcmatrixintlinprog (varargin)
                 end
         end
     end
-    
+	
     [xopt,fopt,status,nodes,nfpoints,L,U] = sci_matrix_intlinprog(nbVar,nbCon,c,intcon,conMatrix,conLB,conUB,lb,ub,objSense,optval);
 
     //Debugging Prints

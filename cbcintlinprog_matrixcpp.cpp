@@ -10,6 +10,7 @@
 #include "OsiClpSolverInterface.hpp"
 extern "C"{
 #include <api_scilab.h>
+#include "sciprint.h"
 
 int matrix_cppintlinprog(){
 
@@ -66,7 +67,7 @@ int matrix_cppintlinprog(){
     }
 
     //intcon matrix
-    if (getDoubleMatrixFromScilab(4,&temp1,&numintcons,&intcon))
+    if (getDoubleMatrixFromScilab(4,&numintcons,&temp2,&intcon))
     {
         return 1;
     }
@@ -168,6 +169,9 @@ int matrix_cppintlinprog(){
     
     const double *val = model.getColSolution();
     
+    for(int i=0;i<nVars;i++){
+        sciprint("%d\n",model.isInteger(i));
+    }
     //Output the solution to Scilab
     
     //get solution for x

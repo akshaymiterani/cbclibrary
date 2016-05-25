@@ -56,6 +56,6 @@ c = -1*[   504 803 667 1103 834 585 811 856 690 832 846 813 868 793 ..
         for i = 1:nbVar
             intcon = [intcon i];
         end
-	disp(intcon);
+		//disp(intcon);
         options = list("MaxTime", 25);
         [x,f,status,output] = cbcintlinprog(c,intcon,A,b,[],[],lb,ub,list())
