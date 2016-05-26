@@ -1,3 +1,7 @@
+// Code Authors: Akshay Miterani and Pranav Deshpande
+// Organization: FOSSEE, IIT Bombay
+// Email: toolbox@scilab.in
+
 function [xopt,fopt,status,output] = cbcmpsintlinprog(varargin)
     
     // Number of input and output arguments
@@ -33,20 +37,20 @@ function [xopt,fopt,status,output] = cbcmpsintlinprog(varargin)
         end
     end
 
-    [xopt,fopt,status,nodes,nfpoints,L,U] = sci_mps_intlinprog(mpsFile, optval)
+    [xopt,fopt,status,nodes,nfpoints,L,U,niter] = sci_mps_intlinprog(mpsFile, optval)
 
     output = struct("relativegap"       , [],..
                     "absolutegap"       , [],..
                     "numnodes"          , [],..
                     "numfeaspoints"     , [],..
-                    "constrviolation"   , [],..
+                    "numiterations"		, [],..
                     "message"           , '');
                     
     output.numnodes=[nodes];
     output.numfeaspoints=[nfpoints];
+    output.numiterations=[niter];
     output.relativegap=(U-L)/(abs(U)+1);
     output.absolutegap=(U-L);
-    //output.constrviolation = max([0;norm(Aeq*xopt-beq, 'inf');(lb'-xopt);(xopt-ub');(A*xopt-b)]);
     
     select status
 
@@ -60,6 +64,12 @@ function [xopt,fopt,status,output] = cbcmpsintlinprog(varargin)
         output.message="Node Limit is reached"
     case 4 then 
         output.message="Numerical Difficulties"
+    case 5 then 
+        output.message="Time Limit Reached"
+    case 6 then 
+        output.message="Continuous Solution Unbounded"
+    case 7 then 
+        output.message="Dual Infeasible"
     else
         output.message="Invalid status returned. Notify the Toolbox authors"
         break;

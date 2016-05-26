@@ -62,7 +62,9 @@ function [xopt,fopt,exitflag,output] = cbcintlinprog (varargin)
     //   <listitem>output.absolutegap: U and L are the Upper and Lower bound of the objective function. absolutegap=(U-L)</listitem>
     //   <listitem>output.numnodes: The number of nodes made during the search</listitem>
     //   <listitem>output.numfeaspoints: The number of feasible points for the search</listitem>
+    //   <listitem>output.numiterations: Number of iterations used in the process</listitem>
     //   <listitem>output.constrviolation: Constraint violation that is positive for violated constraints</listitem>
+    //
     //   <listitem>output.message: Exit Message</listitem>
     // </itemizedlist>
     //
@@ -73,68 +75,10 @@ function [xopt,fopt,exitflag,output] = cbcintlinprog (varargin)
     //   <listitem>exitflag=2 : Solution Limit is reached</listitem>
     //   <listitem>exitflag=3 : Node Limit is reached.</listitem>
     //   <listitem>exitflag=4 : Solution Abandoned</listitem>
+    //   <listitem>exitflag=5 : Time Limit Reached</listitem>
+    //   <listitem>exitflag=6 : Continuous Solution Unbounded</listitem>
+    //   <listitem>exitflag=7 : Dual Infeasible</listitem>
     // </itemizedlist>
-    //
-    // Examples
-    // //Optimal problems
-    // //Linear program, linear inequality constraints
-    // c=[-1,-1/3]'
-    // A=[1,1;1,1/4;1,-1;-1/4,-1;-1,-1;-1,1]
-    // b=[2,1,2,1,-1,2]
-    // [xopt,fopt,exitflag,output,lambda]=cbcintlinprog(c, A, b)
-    // // Press ENTER to continue
-    //
-    // Examples
-    // //Linear program with Linear Inequalities and Equalities`
-    // c=[-1,-1/3]'
-    // A=[1,1;1,1/4;1,-1;-1/4,-1;-1,-1;-1,1]
-    // b=[2,1,2,1,-1,2]  
-    // Aeq=[1,1/4]
-    // beq=[1/2]
-    // [xopt,fopt,exitflag,output,lambda]=cbcintlinprog(c, A, b, Aeq, beq)
-    // // Press ENTER to continue
-    //
-    // Examples
-    // //Linear program with all constraint types 
-    // c=[-1,-1/3]'
-    // A=[1,1;1,1/4;1,-1;-1/4,-1;-1,-1;-1,1]
-    // b=[2,1,2,1,-1,2]   
-    // Aeq=[1,1/4]
-    // beq=[1/2]
-    // lb=[-1,-0.5]
-    // ub=[1.5,1.25]
-    // [xopt,fopt,exitflag,output]=cbcintlinprog(c, A, b, Aeq, beq, lb, ub)
-    // // Press ENTER to continue
-    //
-    // Examples 
-    // //Primal Infeasible Problem
-    // c=[-1,-1,-1]'
-    // A=[1,2,-1]
-    // b=[-4]
-    // Aeq=[1,5,3;1,1,0]
-    // beq=[10,100]
-    // lb=[0,0,0]
-    // ub=[%inf,%inf,%inf]
-    // [xopt,fopt,exitflag,output]= cbcintlinprog(c,A,b,Aeq,beq,lb,ub)
-    // // Press ENTER to continue
-    //
-    // Examples
-    // //Infeasible Problem
-    // c=[3,5,-7]'
-    // A=[-1,-1,4;1,1,4]
-    // b=[-8,5]
-    // Aeq=[]
-    // beq=[]
-    // lb=[-%inf,-%inf,-%inf]
-    // ub=[%inf,%inf,%inf]
-    // [xopt,fopt,exitflag,output]= cbcintlinprog(c,A,b,Aeq,beq,lb,ub)
-    // // Press ENTER to continue
-    //
-    // Examples
-    // filepath = get_absolute_file_path('cbcintlinprog.dem.sce');
-    // filepath = filepath + "exmip1.mps"
-    // [xopt,fopt,exitflag,output,lambda] =cbcintlinprog(filepath)
-
 
     if(type(varargin(1))==1) then
       

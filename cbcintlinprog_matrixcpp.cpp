@@ -1,5 +1,6 @@
 // MILP with CBC library, Matrix
 // Code Authors: Akshay Miterani and Pranav Deshpande
+
 #include <sci_iofunc.hpp>
 
 // For Branch and bound
@@ -42,7 +43,7 @@ int matrix_cppintlinprog(){
     double valobjsense;
     
     CheckInputArgument(pvApiCtx , 11 , 11);             //Checking the input arguments
-    CheckOutputArgument(pvApiCtx , 7, 7);               //Checking the output arguments
+    CheckOutputArgument(pvApiCtx , 8, 8);               //Checking the output arguments
 
     ////////// Manage the input argument //////////
     
@@ -169,9 +170,6 @@ int matrix_cppintlinprog(){
     
     const double *val = model.getColSolution();
     
-    for(int i=0;i<nVars;i++){
-        sciprint("%d\n",model.isInteger(i));
-    }
     //Output the solution to Scilab
     
     //get solution for x
@@ -197,11 +195,21 @@ int matrix_cppintlinprog(){
     else if(model.isAbandoned()){
         status_=4;
     }
+    else if(model.isSecondsLimitReached()){
+        status_=5;
+    }
+    else if(model.isContinuousUnbounded()){
+        status_=6;
+    }
+    else if(model.isProvenDualInfeasible()){
+        status_=7;
+    }
 
     double nodeCount=model.getNodeCount();
     double nfps=model.numberIntegers();
-    double L=model.getObjValue();
-    double U=model.getCurrentObjValue();
+    double U=model.getObjValue();
+    double L=model.getBestPossibleObjValue();
+    double iterCount=model.getIterationCount();
 
     returnDoubleMatrixToScilab(1 , nVars, 1 , xValue);
     returnDoubleMatrixToScilab(2 , 1 , 1 , &objValue);
@@ -210,6 +218,7 @@ int matrix_cppintlinprog(){
     returnDoubleMatrixToScilab(5 , 1 , 1 , &nfps);
     returnDoubleMatrixToScilab(6 , 1 , 1 , &L);
     returnDoubleMatrixToScilab(7 , 1 , 1 , &U);
+    returnDoubleMatrixToScilab(8 , 1 , 1 , &iterCount);
 
     //-------------------------------------------------------------
     

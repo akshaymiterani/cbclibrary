@@ -84,11 +84,21 @@ int mps_cppintlinprog()
     else if(model.isAbandoned()){
         status_=4;
     }
+    else if(model.isSecondsLimitReached()){
+        status_=5;
+    }
+    else if(model.isContinuousUnbounded()){
+        status_=6;
+    }
+    else if(model.isProvenDualInfeasible()){
+        status_=7;
+    }
 
     double nodeCount=model.getNodeCount();
     double nfps=model.numberIntegers();
-    double L=model.getObjValue();
-    double U=model.getCurrentObjValue();
+    double U=model.getObjValue();
+    double L=model.getBestPossibleObjValue();
+    double iterCount=model.getIterationCount();
 
     returnDoubleMatrixToScilab(1 , nVars, 1 , xValue);
     returnDoubleMatrixToScilab(2 , 1 , 1 , &objValue);
@@ -97,6 +107,7 @@ int mps_cppintlinprog()
     returnDoubleMatrixToScilab(5 , 1 , 1 , &nfps);
     returnDoubleMatrixToScilab(6 , 1 , 1 , &L);
     returnDoubleMatrixToScilab(7 , 1 , 1 , &U);
+    returnDoubleMatrixToScilab(8 , 1 , 1 , &iterCount);
 
 
     return 0;

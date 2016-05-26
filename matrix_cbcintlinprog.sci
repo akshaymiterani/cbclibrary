@@ -60,6 +60,7 @@ function [xopt,fopt,status,output] = cbcmatrixintlinprog (varargin)
     //   <listitem>output.numnodes: The number of nodes made during the search</listitem>
     //   <listitem>output.numfeaspoints: The number of feasible points for the search</listitem>
     //   <listitem>output.constrviolation: Constraint violation that is positive for violated constraints</listitem>
+    //   <listitem>output.numiterations: Number of iterations used in the process</listitem>
     //   <listitem>output.message: Exit Message</listitem>
     // </itemizedlist>
     //
@@ -366,10 +367,10 @@ function [xopt,fopt,status,output] = cbcmatrixintlinprog (varargin)
   
 
     //Changing the inputs in symphony's format 
-    conMatrix = [A;Aeq;-Aeq]
+    conMatrix = [A;Aeq]
     nbCon = size(conMatrix,1);
-    conLB = [repmat(-%inf,size(conMatrix,1),1)];
-    conUB = [b;beq;-beq] ;
+    conLB = [repmat(-%inf,size(A,1),1);beq];
+    conUB = [b;beq] ;
     
     isInt = repmat(%f,1,nbVar);
     // Changing intcon into column vector
@@ -407,7 +408,7 @@ function [xopt,fopt,status,output] = cbcmatrixintlinprog (varargin)
         end
     end
 	
-    [xopt,fopt,status,nodes,nfpoints,L,U] = sci_matrix_intlinprog(nbVar,nbCon,c,intcon,conMatrix,conLB,conUB,lb,ub,objSense,optval);
+    [xopt,fopt,status,nodes,nfpoints,L,U,niter] = sci_matrix_intlinprog(nbVar,nbCon,c,intcon,conMatrix,conLB,conUB,lb,ub,objSense,optval);
 
     //Debugging Prints
     //disp(c);disp(intcon);disp(conMatrix);disp(conLB);disp(conUB);disp(lb);disp(ub);disp(Aeq);disp(beq);disp(xopt);
@@ -418,11 +419,13 @@ function [xopt,fopt,status,output] = cbcmatrixintlinprog (varargin)
                     "absolutegap"       , [],..
                     "numnodes"          , [],..
                     "numfeaspoints"     , [],..
+                    "numiterations"		, [],..
                     "constrviolation"   , [],..
                     "message"           , '');
                     
     output.numnodes=[nodes];
     output.numfeaspoints=[nfpoints];
+    output.numiterations=[niter];
     output.relativegap=(U-L)/(abs(U)+1);
     output.absolutegap=(U-L);
     output.constrviolation = max([0;norm(Aeq*xopt-beq, 'inf');(lb'-xopt);(xopt-ub');(A*xopt-b)]);
@@ -439,8 +442,14 @@ function [xopt,fopt,status,output] = cbcmatrixintlinprog (varargin)
         output.message="Node Limit is reached"
     case 4 then 
         output.message="Numerical Difficulties"
+    case 5 then 
+        output.message="Time Limit Reached"
+    case 6 then 
+        output.message="Continuous Solution Unbounded"
+    case 7 then 
+        output.message="Dual Infeasible"
     else
-            output.message="Invalid status returned. Notify the Toolbox authors"
+        output.message="Invalid status returned. Notify the Toolbox authors"
         break;
     end
     
