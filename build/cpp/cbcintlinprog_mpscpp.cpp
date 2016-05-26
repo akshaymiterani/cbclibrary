@@ -94,11 +94,11 @@ int mps_cppintlinprog()
         status_=7;
     }
 
-    double nodeCount=model.getNodeCount();
-    double nfps=model.numberIntegers();
-    double U=model.getObjValue();
-    double L=model.getBestPossibleObjValue();
-    double iterCount=model.getIterationCount();
+    double nodeCount = model.getNodeCount();
+    double nfps = model.numberIntegers();
+    double U = model.getObjValue();
+    double L = model.getBestPossibleObjValue();
+    double iterCount = model.getIterationCount();
 
     returnDoubleMatrixToScilab(1 , nVars, 1 , xValue);
     returnDoubleMatrixToScilab(2 , 1 , 1 , &objValue);
@@ -108,7 +108,6 @@ int mps_cppintlinprog()
     returnDoubleMatrixToScilab(6 , 1 , 1 , &L);
     returnDoubleMatrixToScilab(7 , 1 , 1 , &U);
     returnDoubleMatrixToScilab(8 , 1 , 1 , &iterCount);
-
 
     return 0;
 }

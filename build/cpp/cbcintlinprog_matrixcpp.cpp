@@ -129,8 +129,7 @@ int matrix_cppintlinprog(){
 
     //------------Temporary Version to make coin packed matrix------
     OsiClpSolverInterface solver1;  
-    OsiSolverInterface *solver = &solver1;
-
+    
     CoinPackedMatrix *matrix =  new CoinPackedMatrix(false , 0 , 0);
     matrix->setDimensions(0 , nVars);
     for(int i=0 ; i<nCons ; i++)

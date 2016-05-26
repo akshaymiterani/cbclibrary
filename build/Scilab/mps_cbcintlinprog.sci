@@ -3,6 +3,7 @@
 // Email: toolbox@scilab.in
 
 function [xopt,fopt,status,output] = cbcmpsintlinprog(varargin)
+    // Sci File Wrapper for the mps_cbcintlinprog.cpp file
     
     // Number of input and output arguments
     [nOutput, nInput] = argn();
@@ -46,11 +47,11 @@ function [xopt,fopt,status,output] = cbcmpsintlinprog(varargin)
                     "numiterations"		, [],..
                     "message"           , '');
                     
-    output.numnodes=[nodes];
-    output.numfeaspoints=[nfpoints];
-    output.numiterations=[niter];
-    output.relativegap=(U-L)/(abs(U)+1);
-    output.absolutegap=(U-L);
+    output.numnodes = [nodes];
+    output.numfeaspoints = [nfpoints];
+    output.numiterations = [niter];
+    output.relativegap = (U-L)/(abs(U)+1);
+    output.absolutegap = (U-L);
     
     select status
 
@@ -74,7 +75,5 @@ function [xopt,fopt,status,output] = cbcmpsintlinprog(varargin)
         output.message="Invalid status returned. Notify the Toolbox authors"
         break;
     end
-    
-
 
 endfunction
